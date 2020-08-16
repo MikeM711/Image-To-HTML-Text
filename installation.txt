@@ -1,0 +1,4 @@
+Please install the following:
+
+1) Pillow
+2) pytesseract
