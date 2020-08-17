@@ -1,0 +1,17 @@
+Please install the following modules:
+
+1) Pillow
+2) pytesseract
+
+Tesserect documentation: https://pypi.org/project/pytesseract/
+Pillow documentation: https://pypi.org/project/Pillow/
+
+----------------------------------------------------------------------------
+
+ImageOCR
+
+Public Functions:
+
+read_image()
+create_html_from_text(img_width=50, split_newline=False, word_analysis=False)
+create_black_and_white(inverted=False)

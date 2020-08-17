@@ -16,9 +16,14 @@ class ImageOCR():
 
     def __init__(self, image_name):
         '''
-        Constructor for IMageOCR Class
+        Constructor for ImageOCR Class
         '''
+        # incoming image_name must be a string
+        assert isinstance(image_name, str), 'image_name not a string'
+
+        # Create a full path
         self.__path = ImageOCR.img_dir + image_name  # Make path private
+
         # output and image_name will be public
         self.output_text = ''
         self.output_html = ''
@@ -71,20 +76,29 @@ class ImageOCR():
         ability to spilt lines on newline, 3) Ability to display a word
         analysis table of word frequency (descending order)
         '''
+        # initialize table and text
         table = ""
         text = self.output_text
+
         # The HTML is one layer deep, so we will concatenate a dot to escape
         # the "output_html" folder to grab the proper image in question
         path_from_html = "." + self.__path
+
+        # Check optional params given by the user
         if word_analysis is True:
             # Create an HTML table for word analysis
-            table = ImageOCR.__word_analysis(text)
+            table = self.__word_analysis()
         if split_newline is True:
             text_list = self.output_text.split("\n")
             # set text to an empty string and build off of it
             text = ""
-            for text_line in text_list:
+
+            # using a WHILE loop to create a "split newline" output format
+            idx = 0
+            while idx < len(text_list):
+                text_line = text_list[idx]
                 text += f"{text_line}\n<br/>\n"
+                idx += 1  # increment the index
 
         # concatenate the ending of the HTML
         html = ('<div style="padding-left:2%">'
@@ -96,8 +110,11 @@ class ImageOCR():
                 '\n</div>'
                 '\n</div>\n')
 
-        output_file_name = f"{ImageOCR.output_dir}/test-{time.time()}.html"
+        # Create HTML output file path
+        # time.time() used to create a timestamp for totally unique files
+        output_file_name = f"{ImageOCR.output_dir}/output-{time.time()}.html"
 
+        # Open the HTML file and write in it
         try:
             output_file = open(output_file_name, "w")
         except FileNotFoundError:
@@ -107,23 +124,24 @@ class ImageOCR():
         for line in html:
             output_file.write(line)
 
+        # close HTML file
         output_file.close()
 
-        # Set HTML attribute if one wishes to use it for later
+        # Set HTML attribute if one wishes to access it later
         self.output_html = html
 
         return html  # Return HTML
 
-    def __word_analysis(text):
+    def __word_analysis(self):
         '''
-        Method creates an HTML table of word frequencies. It is a private
+        Private method that creates an HTML table of word frequencies. It is a
         helper method for the create_html_from_text method.
         '''
         # Find most common word from OCR result
         words_dict = {}
 
-        # convert all character to lowercase
-        modified_text = text.lower()
+        # convert all output characters to lowercase
+        modified_text = self.output_text.lower()
 
         # Split the text list on each line (a word)
         line_list = modified_text.split('\n')
@@ -196,7 +214,7 @@ class ImageOCR():
         # Convert to grayscale using "L"
         gray_img = image_file.convert("L")
         if inverted is False:
-            # Make darks 100% dark, make whites 100% white
+            # Make dark pixels 100% dark, make white pixels 100% white
             black_white = gray_img.point(lambda x: 0 if x > 128 else 255, '1')
         if inverted is True:
             # Make darks 100% white, make whites 100% dark
@@ -229,7 +247,7 @@ class ImageOCR():
     def __add__(self, other):
         '''
         A "Magic Method" that will add the output_text of two ImageOCR
-        instances for the "+" operation.
+        instances for the "+" operation. The resulting output is a String type.
         '''
         return self.output_text + other.output_text
 
@@ -282,4 +300,4 @@ if __name__ == "__main__":
         expect_im_txt_1 + expect_im_txt_2), (
             "This simple image was incorrectly read.")
 
-    input_ocr_image_2.create_html_from_text(word_analysis=True)
+    print("Unit Tests passed!")
