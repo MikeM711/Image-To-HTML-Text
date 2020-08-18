@@ -1,3 +1,11 @@
+"""
+This file instantiates 4 ImageOCR objects, including example_1.py as the first
+example and and example_2.py as the second example.
+
+Each image is read, and their outputs are displayed within each instance's own
+HTML file.
+"""
+
 from ImageOCR import ImageOCR
 
 
@@ -56,6 +64,7 @@ if __name__ == "__main__":
     input_image_4.create_html_from_text(img_width=45, split_newline=True)
 
     # EXAMPLE #4.2
+
     # In this particular example, we want to accurately read the
     # "Description", "Quantity", "Unit Price" and "Cost" headers, to make up
     # for the last example not being able to read that particular text.

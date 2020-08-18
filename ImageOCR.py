@@ -1,3 +1,14 @@
+"""
+Michael McCabe
+Class: CS 521 - Summer 2
+Date: 8/16
+Final Project
+Description of Problem:
+Create a class object that allows a user to read a particular image and
+create HTML based on the output of that particular image. Users have the
+option to manipulate their image and the how the HTML output is formatted.
+"""
+
 from PIL import Image
 import pytesseract
 import sys
@@ -50,7 +61,10 @@ class ImageOCR():
         try:
             image_file = Image.open(self.__path)
         except FileNotFoundError:
-            sys.exit("Error: Input image file name not found.")
+            sys.exit("Error: Input image file name not found.\nPlease make "
+                     "sure your file is found inside at the path, "
+                     f"{self.__path}, and that the name of your image and "
+                     "extension is correct.")
 
         # Read the image text
         image_file_text = pytesseract.image_to_string(image_file)
@@ -61,8 +75,7 @@ class ImageOCR():
         # save the output text inside the instance
         self.output_text = image_file_text
 
-        # return image file text
-        return image_file_text
+        return self
 
     def create_html_from_text(self, img_width=50, split_newline=False,
                               word_analysis=False):
@@ -107,7 +120,9 @@ class ImageOCR():
             table += "\n</table>"
 
         if split_newline is True:
-            text_list = self.output_text.split("\n")
+            # Adds <br/> break tags between newline
+
+            text_list = text.split("\n")
             # set text to an empty string and build off of it
             text = ""
 
@@ -148,7 +163,7 @@ class ImageOCR():
         # Set HTML attribute if one wishes to access it later
         self.output_html = html
 
-        return html  # Return HTML
+        return self
 
     def __word_analysis(self, table):
         '''
@@ -196,6 +211,13 @@ class ImageOCR():
                       f'\n\t<td>{v}</td>'
                       '\n</tr>')
 
+        # If the image does not have any words let the user know within
+        # the table
+        if len(sort_words_list) == 0:
+            table += ('\n<tr>'
+                      '\n\t<td colspan="2">No words found</td>'
+                      '\n</tr>')
+
         return table
 
     def create_black_and_white(self, inverted=False):
@@ -212,7 +234,10 @@ class ImageOCR():
         try:
             image_file = Image.open(self.__path)
         except FileNotFoundError:
-            sys.exit("Error: Input image file name not found.")
+            sys.exit("Error: Input image file name not found.\nPlease make "
+                     "sure your file is found inside at the path, "
+                     f"{self.__path}, and that the name of your image and "
+                     "extension is correct.")
 
         # Convert to grayscale using "L"
         gray_img = image_file.convert("L")
@@ -232,13 +257,13 @@ class ImageOCR():
         # The path of where this manipulated_image should go
         # time.time() used to create a timestamp for totally unique files
         black_white_path = (f"{ImageOCR.manipulated_images_dir}"
-                            f"/img{time.time()}.png")
+                            f"/img-{time.time()}.png")
 
         # Create the black and white image at this path
         try:
             black_white.save(black_white_path)
         except FileNotFoundError:
-            sys.exit("ERROR: Please create an \"manipulated_images\" folder "
+            sys.exit("ERROR: Please create a \"manipulated_images\" folder "
                      "in the root directory")
 
         # close the black and white file
@@ -247,7 +272,7 @@ class ImageOCR():
         # set a new path in our instance
         self.__path = black_white_path
 
-        # The new image path we made
+        # Return to the user the new image path we made
         return black_white_path
 
     def __add__(self, other):

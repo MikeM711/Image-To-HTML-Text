@@ -1,3 +1,12 @@
+"""
+This file only reads walmart.jpg from within the "input_images" directory.
+
+We show that the current image provided is not good enough - so we manipulated
+the image into pure black and white to achieve the desired outcome.
+
+We will then create an HTML file of the results.
+"""
+
 from ImageOCR import ImageOCR
 
 if __name__ == "__main__":
