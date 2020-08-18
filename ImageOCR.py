@@ -87,7 +87,25 @@ class ImageOCR():
         # Check optional params given by the user
         if word_analysis is True:
             # Create an HTML table for word analysis
-            table = self.__word_analysis()
+            # Create the beginning of the table
+            table = ('\n<style>'
+                     '\ntable, th, td {'
+                     '\nborder: 1px solid black;'
+                     '\nborder-collapse: collapse;'
+                     '\n}'
+                     '\n</style>'
+                     '\n<table style="width:40%">'
+                     '\n<tr>'
+                     '\n<th>Word</th>'
+                     '\n<th>Frequency</th>'
+                     '\n</tr>')
+
+            # Create the table body using private __word_analysis method
+            table = self.__word_analysis(table)
+
+            # Complete the table
+            table += "\n</table>"
+
         if split_newline is True:
             text_list = self.output_text.split("\n")
             # set text to an empty string and build off of it
@@ -102,7 +120,7 @@ class ImageOCR():
 
         # concatenate the ending of the HTML
         html = ('<div style="padding-left:2%">'
-                '\n<h1> CS521 - Reading Text From Images </h1>'
+                f'\n<h1> CS521 - ImageOCR: {self.image_name}</h1>'
                 f'\n<img width="{img_width}%"  src="{path_from_html}"/>'
                 '\n<div style="padding-right:45%">'
                 f'\n<p >{text}</p>'
@@ -132,12 +150,12 @@ class ImageOCR():
 
         return html  # Return HTML
 
-    def __word_analysis(self):
+    def __word_analysis(self, table):
         '''
-        Private method that creates an HTML table of word frequencies. It is a
-        helper method for the create_html_from_text method.
+        Private method that creates an HTML table body of word frequencies. It
+        is a helper method for the create_html_from_text method.
         '''
-        # Find most common word from OCR result
+        # Create an empty dictionary
         words_dict = {}
 
         # convert all output characters to lowercase
@@ -164,24 +182,11 @@ class ImageOCR():
                     words_dict[word] += 1
 
         # Sort dict pairs by value (second element in the tuple item)
-        # in ascending order
+        # in descending order
         sort_words_list = sorted([(k, v) for k, v in words_dict.items()],
                                  key=lambda x: x[1], reverse=True)
 
         # Create words/frequency table
-
-        # Create the beginning of the table
-        table = ('\n<style>'
-                 '\ntable, th, td {'
-                 '\nborder: 1px solid black;'
-                 '\nborder-collapse: collapse;'
-                 '\n}'
-                 '\n</style>'
-                 '\n<table style="width:40%">'
-                 '\n<tr>'
-                 '\n<th>Word</th>'
-                 '\n<th>Frequency</th>'
-                 '\n</tr>')
 
         # loop through the dictionary, insert word and frequency
         # into tables
@@ -191,8 +196,6 @@ class ImageOCR():
                       f'\n\t<td>{v}</td>'
                       '\n</tr>')
 
-        # Complete the table
-        table += "\n</table>"
         return table
 
     def create_black_and_white(self, inverted=False):
@@ -213,11 +216,14 @@ class ImageOCR():
 
         # Convert to grayscale using "L"
         gray_img = image_file.convert("L")
-        if inverted is False:
-            # Make dark pixels 100% dark, make white pixels 100% white
-            black_white = gray_img.point(lambda x: 0 if x > 128 else 255, '1')
+
+        # 255 = WHITE, 0 = BLACK
         if inverted is True:
-            # Make darks 100% white, make whites 100% dark
+            # In grayscale: Make darks 100% white, make whites 100% dark
+            black_white = gray_img.point(lambda x: 0 if x > 128 else 255, '1')
+        elif inverted is False:
+            # In grayscale: Make dark pixels 100% dark, make white pixels
+            # 100% white
             black_white = gray_img.point(lambda x: 0 if x < 128 else 255, '1')
 
         # Close the image_file, it is not needed anymore

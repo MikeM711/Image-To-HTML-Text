@@ -10,8 +10,24 @@ Pillow documentation: https://pypi.org/project/Pillow/
 
 ImageOCR
 
+How to use:
+1) Inside the input_images folder, add the image you would like to read text from.
+2) When you instantiate an ImageOCR class, provide the name of the file and the
+extention inside the constructor as a String (ex: "my_image.jpg").
+3) Read the image using the read_image method. This method will store the resulting
+text inside its own output_text attribute.
+4) Create an HTML file of the resulting text using the create_html_from_text method.
+5) If necessary, modify your image into a new image using the create_black_and_white
+method. This method will create an image in your "manipulated_images" directory.
+
 Public Functions:
 
 read_image()
 create_html_from_text(img_width=50, split_newline=False, word_analysis=False)
 create_black_and_white(inverted=False)
+
+Public Variables:
+
+output_text
+output_html
+image_name
