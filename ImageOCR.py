@@ -25,12 +25,14 @@ class ImageOCR():
     output_dir = './output_html'
     manipulated_images_dir = "./manipulated_images"
 
-    def __init__(self, image_name):
+    def __init__(self, image_name="placeholder.png"):
         '''
         Constructor for ImageOCR Class
         '''
-        # incoming image_name must be a string
-        assert isinstance(image_name, str), 'image_name not a string'
+        # incoming image_name MUST be a string
+        if isinstance(image_name, str) is False:
+            sys.exit("The image name provided is not a String. Please provide "
+                     "a file name of String type.")
 
         # Create a full path
         self.__path = ImageOCR.img_dir + image_name  # Make path private
@@ -61,9 +63,9 @@ class ImageOCR():
         try:
             image_file = Image.open(self.__path)
         except FileNotFoundError:
-            sys.exit("Error: Input image file name not found.\nPlease make "
+            sys.exit("Error: Input image file not found.\nPlease make "
                      "sure your file is found inside at the path, "
-                     f"{self.__path}, and that the name of your image and "
+                     f"\"{self.__path}\", and that the name of your image and "
                      "extension is correct.")
 
         # Read the image text
@@ -75,7 +77,7 @@ class ImageOCR():
         # save the output text inside the instance
         self.output_text = image_file_text
 
-        return self
+        return self.output_text
 
     def create_html_from_text(self, img_width=50, split_newline=False,
                               word_analysis=False):
@@ -234,22 +236,23 @@ class ImageOCR():
         try:
             image_file = Image.open(self.__path)
         except FileNotFoundError:
-            sys.exit("Error: Input image file name not found.\nPlease make "
+            sys.exit("Error: Input image file not found.\nPlease make "
                      "sure your file is found inside at the path, "
-                     f"{self.__path}, and that the name of your image and "
+                     f"\"{self.__path}\", and that the name of your image and "
                      "extension is correct.")
 
         # Convert to grayscale using "L"
         gray_img = image_file.convert("L")
 
-        # 255 = WHITE, 0 = BLACK
-        if inverted is True:
-            # In grayscale: Make darks 100% white, make whites 100% dark
-            black_white = gray_img.point(lambda x: 0 if x > 128 else 255, '1')
-        elif inverted is False:
+        # Create black and white image
+        # 0 = BLACK, 255 = WHITE
+        if inverted is False:
             # In grayscale: Make dark pixels 100% dark, make white pixels
             # 100% white
-            black_white = gray_img.point(lambda x: 0 if x < 128 else 255, '1')
+            black_white = gray_img.point(lambda x: 0 if x < 128 else 255)
+        elif inverted is True:
+            # In grayscale: Make darks 100% white, make whites 100% dark
+            black_white = gray_img.point(lambda x: 0 if x > 128 else 255)
 
         # Close the image_file, it is not needed anymore
         image_file.close()
@@ -306,7 +309,7 @@ if __name__ == "__main__":
 
     # Test to see if the tester1 image text output is the expected test
     assert im_txt_1 == expect_im_txt_1, (
-        "This simple image was incorrectly read.")
+        "The simple image 'tester1.png', was incorrectly read.")
 
     # A second ImageOCR instance - another very simple image
 
@@ -322,7 +325,7 @@ if __name__ == "__main__":
 
     # Test to see if the tester2 image text output is the expected test
     assert im_txt_2 == expect_im_txt_2, (
-        "This simple image was incorrectly read.")
+        "The simple image 'tester2.png', was incorrectly read.")
 
     # Perform a "Magic Method" assertion
     # adding 2 instances together should equal a string concatenation of their
