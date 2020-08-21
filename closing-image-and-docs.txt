@@ -1,4 +1,0 @@
-# Remember to have THREE container types
-# Tesserect documentation: https://pypi.org/project/pytesseract/
-# Closing an image:
-# https://stackoverflow.com/questions/31751464/how-do-i-close-an-image-opened-in-pillow

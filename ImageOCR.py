@@ -135,7 +135,7 @@ class ImageOCR():
                 text += f"{text_line}\n<br/>\n"
                 idx += 1  # increment the index
 
-        # concatenate the ending of the HTML
+        # Create full html for the output file
         html = ('<div style="padding-left:2%">'
                 f'\n<h1> CS521 - ImageOCR: {self.image_name}</h1>'
                 f'\n<img width="{img_width}%"  src="{path_from_html}"/>'
@@ -230,7 +230,8 @@ class ImageOCR():
         new image path.
 
         User has the option to make dark colors and light colors completely
-        black and white, or white and black, respectively.
+        black and white (inverted=False), or white and black (inverted=True),
+        respectively.
         '''
         # Open the image_file from our path
         try:
