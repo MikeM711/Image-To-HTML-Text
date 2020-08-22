@@ -87,9 +87,12 @@ class ImageOCR():
         The HTML file will show the image in question using the private path
         attribute and display text found in the output_text attribute.
 
-        Optional parameters include 1) Image width (in percent), 2) The
-        ability to spilt lines on newline, 3) Ability to display a word
-        analysis table of word frequency (descending order)
+        Optional parameters include:
+        1) Image width (in percent)
+        2) The ability to replace newline characters with break <br/> tags, to
+        visually show any newlines inside the HTML
+        3) Ability to display a word analysis table of word frequency
+        (descending order)
         '''
         # initialize table and text
         table = ""
