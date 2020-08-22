@@ -66,7 +66,7 @@ class ImageOCR():
             sys.exit("Error: Input image file not found.\nPlease make "
                      "sure your file is found inside at the path, "
                      f"\"{self.__path}\", and that the name of your image and "
-                     "extension is correct.")
+                     f"extension is correct: \"{self.image_name}\".")
 
         # Read the image text
         image_file_text = pytesseract.image_to_string(image_file)
@@ -153,8 +153,8 @@ class ImageOCR():
         try:
             output_file = open(output_file_name, "w")
         except FileNotFoundError:
-            sys.exit("ERROR: Please create an \"output_html\" folder in the "
-                     "root directory")
+            sys.exit("\nERROR: Please create an \"output_html\" folder in the "
+                     "root directory for the location of HTML output.")
 
         for line in html:
             output_file.write(line)
@@ -246,13 +246,14 @@ class ImageOCR():
         gray_img = image_file.convert("L")
 
         # Create black and white image
-        # 0 = BLACK, 255 = WHITE
+        # Pixel values in grayscale: 0 = BLACK, 255 = WHITE
         if inverted is False:
             # In grayscale: Make dark pixels 100% dark, make white pixels
             # 100% white
             black_white = gray_img.point(lambda x: 0 if x < 128 else 255)
         elif inverted is True:
-            # In grayscale: Make darks 100% white, make whites 100% dark
+            # In grayscale: To invert the color - make darks 100% white,
+            # make whites 100% dark
             black_white = gray_img.point(lambda x: 0 if x > 128 else 255)
 
         # Close the image_file, it is not needed anymore
