@@ -6,7 +6,7 @@ Final Project
 Description of Problem:
 Create a class object that allows a user to read a particular image and
 create HTML based on the output of that particular image. Users have the
-option to manipulate their image and the how the HTML output is formatted.
+option to manipulate their image and how the HTML output is formatted.
 """
 
 from PIL import Image
@@ -37,7 +37,9 @@ class ImageOCR():
         # Create a full path
         self.__path = ImageOCR.img_dir + image_name  # Make path private
 
-        # output and image_name will be public
+        # Note: output and image_name will be public to meet requirements
+        # If this were a real module, I would make these attributes private,
+        # and create getter methods to access them.
         self.output_text = ''
         self.output_html = ''
         self.image_name = image_name
@@ -60,6 +62,8 @@ class ImageOCR():
         tool and the resulting text string prediction is both updated in the
         instance and returned.
         '''
+
+        # Open the image file
         try:
             image_file = Image.open(self.__path)
         except FileNotFoundError:
@@ -209,7 +213,7 @@ class ImageOCR():
         # Create words/frequency table
 
         # loop through the dictionary, insert word and frequency
-        # into tables
+        # into table rows
         for k, v in sort_words_list:
             table += ('\n<tr>'
                       f'\n\t<td>{k}</td>'

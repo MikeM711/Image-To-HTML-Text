@@ -1,3 +1,6 @@
+Clean and/or create "output_html" and "manipulated_images" directory
+using the following terminal commands:
+
 rm -r manipulated_images
 rm -r output_html
 mkdir manipulated_images

@@ -16,8 +16,8 @@ ImageOCR
 
 How to use:
 1) Inside the "input_images" directory, add the image you would like to read text from.
-2) When you instantiate an ImageOCR class object, provide the name of the file and the
-file extention inside the constructor as a String
+2) When you instantiate an ImageOCR class object, provide the name of the image file and the
+file extention inside the constructor as a String.
 - ex: ImageOCR("my_image.jpg")
 3) Read the image using the read_image() method. This method will store the resulting
 text inside its own output_text instance attribute.
