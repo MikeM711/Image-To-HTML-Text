@@ -1,3 +1,5 @@
+Project & Presentation Grade: 100/100
+
 Michael McCabe - Final Project for CS 521 - Summer 2
 
 ----------------------------------------------------------------------------
